@@ -42,7 +42,7 @@ function selectProduct(id) {
 }
 
 // Display designs
-const designFiles = ['designs/hollow knight.png','designs/sparta.png'];
+const designFiles = ['designs/hollow knight.png'];
 function displayDesigns() {
   const designsDiv = document.getElementById('designs');
   designFiles.forEach(file => {
