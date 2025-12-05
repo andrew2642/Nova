@@ -2,12 +2,6 @@
   
   {
     "id": 1,
-    "name": "XL T-Shirt",
-    "price": 300,
-    "image": "images/shirt.jpeg"
-  },
-  {
-    "id": 2,
     "name": "XL Hoodie",
     "price": 1200,
     "image": "images/hoodie.jpg"
