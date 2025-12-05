@@ -65,50 +65,46 @@ const canvas = document.getElementById("preview");
 const ctx = canvas.getContext("2d");
 
 // Start drag
-canvas.addEventListener("mousedown", (e) => {
-  const mouseX = e.offsetX;
-  const mouseY = e.offsetY;
-
+function startDrag(e) {
+  const pos = getPointerPos(e);
   if (
-    mouseX > designX &&
-    mouseX < designX + designWidth &&
-    mouseY > designY &&
-    mouseY < designY + designHeight
+    pos.x > designX &&
+    pos.x < designX + designWidth &&
+    pos.y > designY &&
+    pos.y < designY + designHeight
   ) {
     isDragging = true;
-    dragOffsetX = mouseX - designX;
-    dragOffsetY = mouseY - designY;
+    dragOffsetX = pos.x - designX;
+    dragOffsetY = pos.y - designY;
+    e.preventDefault(); // prevent scrolling on touch
   }
-});
+}
 
-// Move drag
-canvas.addEventListener("mousemove", (e) => {
-    const mouseX = e.offsetX;
-    const mouseY = e.offsetY;
+function drag(e) {
+  if (!isDragging) return;
+  const pos = getPointerPos(e);
+  designX = pos.x - dragOffsetX;
+  designY = pos.y - dragOffsetY;
+  drawPreview();
+  e.preventDefault(); // prevent scrolling on touch
+}
 
-    // Change cursor to grab when hovering over design
-    if (
-        mouseX > designX &&
-        mouseX < designX + designWidth &&
-        mouseY > designY &&
-        mouseY < designY + designHeight
-    ) {
-        canvas.classList.add("can-move");
-    } else {
-        canvas.classList.remove("can-move");
-    }
+function stopDrag() {
+  isDragging = false;
+}
 
-    if (isDragging) {
-        designX = e.offsetX - dragOffsetX;
-        designY = e.offsetY - dragOffsetY;
-        drawPreview();
-    }
-});
+// Mouse events
+canvas.addEventListener("mousedown", startDrag);
+canvas.addEventListener("mousemove", drag);
+canvas.addEventListener("mouseup", stopDrag);
+canvas.addEventListener("mouseleave", stopDrag);
 
+// Touch events
+canvas.addEventListener("touchstart", startDrag, { passive: false });
+canvas.addEventListener("touchmove", drag, { passive: false });
+canvas.addEventListener("touchend", stopDrag);
+canvas.addEventListener("touchcancel", stopDrag);
 
-// End drag
-canvas.addEventListener("mouseup", () => { isDragging = false; });
-canvas.addEventListener("mouseleave", () => { isDragging = false; });
 
 // ------------------------------
 // DRAW EVERYTHING
