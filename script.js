@@ -1,4 +1,4 @@
-let designX = 200;  
+let designX = 200;
 let designY = 250;
 let designWidth = 200;
 let designHeight = 200;
@@ -21,7 +21,7 @@ fetch('products.json')
     displayDesigns();
   });
 
-// Display blank products
+// Display products
 function displayProducts() {
   const list = document.getElementById('product-list');
   products.forEach(product => {
@@ -49,7 +49,6 @@ function displayDesigns() {
     const img = document.createElement('img');
     img.src = file;
     img.width = 80;
-    img.style.cursor = 'pointer';
     img.onclick = () => {
       selectedDesign = file;
       drawPreview();
@@ -59,10 +58,26 @@ function displayDesigns() {
 }
 
 // ------------------------------
-// CANVAS + DRAG CONTROLS
+// CANVAS & DRAG CONTROLS
 // ------------------------------
 const canvas = document.getElementById("preview");
 const ctx = canvas.getContext("2d");
+
+// Helper to get pointer position (mouse or touch)
+function getPointerPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  if (e.touches) {
+    return {
+      x: e.touches[0].clientX - rect.left,
+      y: e.touches[0].clientY - rect.top
+    };
+  } else {
+    return {
+      x: e.offsetX,
+      y: e.offsetY
+    };
+  }
+}
 
 // Start drag
 function startDrag(e) {
@@ -76,21 +91,38 @@ function startDrag(e) {
     isDragging = true;
     dragOffsetX = pos.x - designX;
     dragOffsetY = pos.y - designY;
-    e.preventDefault(); // prevent scrolling on touch
+    canvas.classList.add("dragging");
+    e.preventDefault();
   }
 }
 
+// Drag
 function drag(e) {
-  if (!isDragging) return;
   const pos = getPointerPos(e);
+
+  // Cursor change on hover (desktop)
+  if (
+    pos.x > designX &&
+    pos.x < designX + designWidth &&
+    pos.y > designY &&
+    pos.y < designY + designHeight
+  ) {
+    canvas.classList.add("can-move");
+  } else {
+    canvas.classList.remove("can-move");
+  }
+
+  if (!isDragging) return;
   designX = pos.x - dragOffsetX;
   designY = pos.y - dragOffsetY;
   drawPreview();
-  e.preventDefault(); // prevent scrolling on touch
+  e.preventDefault();
 }
 
+// Stop drag
 function stopDrag() {
   isDragging = false;
+  canvas.classList.remove("dragging");
 }
 
 // Mouse events
@@ -99,12 +131,11 @@ canvas.addEventListener("mousemove", drag);
 canvas.addEventListener("mouseup", stopDrag);
 canvas.addEventListener("mouseleave", stopDrag);
 
-// Touch events
+// Touch events (mobile)
 canvas.addEventListener("touchstart", startDrag, { passive: false });
 canvas.addEventListener("touchmove", drag, { passive: false });
 canvas.addEventListener("touchend", stopDrag);
 canvas.addEventListener("touchcancel", stopDrag);
-
 
 // ------------------------------
 // DRAW EVERYTHING
@@ -179,4 +210,3 @@ function updateCart() {
 document.getElementById('checkout-btn').addEventListener('click', () => {
   alert('Checkout feature goes here!');
 });
-
