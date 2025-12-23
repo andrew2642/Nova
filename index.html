@@ -1,44 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Nova - Custom Shirt & Hoodie Store</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Nova Custom Wear</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>Nova</h1>
-    <p>Your custom hoodie & shirt store</p>
-  </header>
 
-  <main>
-    <section id="product-section">
-      <h2>Choose Your Product</h2>
-      <div id="product-list"></div>
-    </section>
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <img src="Asset 7.png" alt="Nova Logo">
+  </div>
+</header>
 
-    <section id="customization-section">
-      <h2>Customize Your Product</h2>
-      <div id="customization">
-        <canvas id="preview" width="600" height="800"></canvas>
-        <h3>Choose a Design:</h3>
-        <div id="designs"></div>
-        <button id="add-to-cart">Add Customized Product to Cart</button>
+<main>
+
+  <!-- PRODUCTS -->
+  <section id="product-section">
+    <h2>Select Product</h2>
+
+    <div id="product-list">
+      <div onclick="selectProduct(0)">
+        <img src="products/Asset 4.png">
+        <p>Hoodie</p>
       </div>
-    </section>
 
-    <section id="cart-section">
-      <h2>Cart</h2>
-      <ul id="cart-items"></ul>
-      <p>Total: $<span id="cart-total">0.00</span></p>
-      <button id="checkout-btn">Checkout</button>
-    </section>
-  </main>
+      <div onclick="selectProduct(1)">
+        <img src="products/black-t-shirt-mockup.jpg">
+        <p>Shirt</p>
+      </div>
+    </div>
+  </section>
 
-  <footer>
-    <p>&copy; 2025 Nova. All rights reserved.</p>
-  </footer>
+  <!-- CUSTOMIZATION -->
+  <section id="customization-section">
+    <h3>Customize Your Product</h3>
+    <div id="customization">
 
-  <script src="script.js"></script>
+      <div class="canvas-container">
+        <div class="canvas-box">
+          <p>Front</p>
+          <canvas id="frontCanvas"></canvas>
+        </div>
+
+        <div class="canvas-box">
+          <p>Back</p>
+          <canvas id="backCanvas"></canvas>
+        </div>
+      </div>
+
+      <!-- DESIGNS -->
+      <div id="designs">
+        <img src="designs/Asset 5.png" onclick="selectDesign(this.src)">
+        <img src="designs/Asset 3.png" onclick="selectDesign(this.src)">
+      </div>
+
+      <!-- SIZE -->
+      <div class="size-section">
+        <p>Select Size</p>
+        <div class="sizes">
+          <button class="size-btn" data-size="S">S</button>
+          <button class="size-btn" data-size="M">M</button>
+          <button class="size-btn" data-size="L">L</button>
+          <button class="size-btn" data-size="XL">XL</button>
+        </div>
+      </div>
+
+      <!-- ADD TO CART -->
+      <button id="add-to-cart-btn">Add to Cart</button>
+
+    </div>
+  </section>
+
+  <!-- CART -->
+  <section id="cart-section">
+    <h4>Cart</h4>
+    <ul id="cart-items"></ul>
+    <button id="remove-all-btn">Remove All</button>
+  </section>
+
+</main>
+
+
+<script src="script.js"></script>
 </body>
 </html>
