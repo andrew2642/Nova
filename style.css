@@ -16,7 +16,7 @@ body {
 
 /* HEADER */
 header {
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.5);
   top: 0;
   z-index: 1000;
 }
@@ -66,7 +66,7 @@ main {
 
 /* CUSTOMIZATION */
 #customization {
-  background: white;
+  background: rgb(255, 255, 255);
   color: black;
   padding: 25px;
   border-radius: 18px;
@@ -84,6 +84,48 @@ h3 {
   text-align: center;
   margin-bottom: 15px;
   filter: drop-shadow( 0px 2.5px 1px black);
+}
+
+#front {
+  font-family: sterion;
+  padding: 12px 25px;
+  margin-left: 420px;
+  background: #ffffff;
+  color: rgb(0, 0, 0);
+  border-radius: 12px;
+  font-size: 16px;
+}
+#front:hover {
+  background: #dddddd;
+}
+#front.clicked {
+  font-family: sterion;
+  padding: 12px 25px;
+  margin-left: 420px;
+  background: #000000;
+  color: white;
+  border-radius: 12px;
+  font-size: 16px;
+}
+
+#back {
+  font-family: sterion;
+  padding: 12px 25px;
+  background: #ffffff;
+  color: rgb(0, 0, 0);
+  border-radius: 12px;
+  font-size: 16px;
+}
+#back:hover {
+  background: #dddddd;
+}
+#back.clicked {
+  font-family: sterion;
+  padding: 12px 25px;
+  background: #000000;
+  color: white;
+  border-radius: 12px;
+  font-size: 16px;
 }
 
 .canvas-container {
@@ -146,6 +188,18 @@ canvas {
   font-family: sterion;
   display: block;
   margin: 20px auto 0 auto;
+  padding: 12px 25px;
+  background: #000000;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#export-both {
+  display: block;
+  margin: 0px 20px 0 auto;
   padding: 12px 25px;
   background: #000000;
   color: white;

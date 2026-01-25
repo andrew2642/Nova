@@ -22,13 +22,15 @@
 
     <div id="product-list">
       <div onclick="selectProduct(0)">
-        <img src="products/Asset 4.png">
-        <p>Hoodie</p>
+        <img src="products/Asset 1.png">
+        <p style="font-family: Sterion;">White Hoodie</p>
+        <p style="font-family: Sterion;">Price: 500 EGP</p>
       </div>
 
       <div onclick="selectProduct(1)">
-        <img src="products/black-t-shirt-mockup.jpg">
-        <p>Shirt</p>
+        <img src="products/Asset 3.png">
+        <p style="font-family: Sterion;">Black Hoodie</p>
+        <p style="font-family: Sterion;">Price: 500 EGP</p>
       </div>
     </div>
   </section>
@@ -50,6 +52,11 @@
         </div>
       </div>
 
+      <div class="Choose Side">
+      <button id="front" onclick="switchSide('front')">Front</button>
+      <button id="back" onclick="switchSide('back')">Back</button>
+      </div>
+
       <!-- DESIGNS -->
       <div id="designs">
         <img src="designs/Asset 5.png" onclick="selectDesign(this.src)">
@@ -60,15 +67,18 @@
       <div class="size-section">
         <p>Select Size</p>
         <div class="sizes">
-          <button class="size-btn" data-size="S">S</button>
-          <button class="size-btn" data-size="M">M</button>
           <button class="size-btn" data-size="L">L</button>
           <button class="size-btn" data-size="XL">XL</button>
+          <button class="size-btn" data-size="2XL">2XL</button>
         </div>
       </div>
 
       <!-- ADD TO CART -->
       <button id="add-to-cart-btn">Add to Cart</button>
+
+      <!-- EXPORT BUTTONS -->
+      <button id="export-both">Export Image</button>
+
 
     </div>
   </section>

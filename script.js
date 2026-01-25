@@ -1,10 +1,13 @@
 /* =================================================
-   🔧 BASIC CANVAS SETUP
-   🔴 CHANGE HERE → canvas size (matches print area)
+   🔧 CANVAS CONFIGURATION (PRINT AREA)
+   🔴 EDIT HERE → change print area size
 ================================================= */
-const CANVAS_WIDTH = 500;   // px
-const CANVAS_HEIGHT = 600;  // px
+const CANVAS_WIDTH = 500;
+const CANVAS_HEIGHT = 600;
 
+/* =================================================
+   🎯 CANVAS SETUP
+================================================= */
 const frontCanvas = document.getElementById("frontCanvas");
 const backCanvas = document.getElementById("backCanvas");
 
@@ -20,87 +23,99 @@ const backCtx = backCanvas.getContext("2d");
    🧠 GLOBAL STATE
 ================================================= */
 let activeSide = "front";
-let productImage = null;
 let dragging = false;
 let offsetX = 0;
 let offsetY = 0;
+let productImage = null;
+let productName = "";
 
 /* =================================================
-   🎯 FRONT / BACK DATA
+   🧥 PRODUCTS
+   🔴 EDIT HERE → Add / change products
+================================================= */
+const PRODUCTS = [
+  {
+    name: "White Hoodie",
+    front: "products/Asset 1.png",
+    back: "products/Asset 2.png",
+    price: 500,
+  },
+  {
+    name: "Black Hoodie",
+    front: "products/Asset 3.png",
+    back: "products/Asset 4.png",
+    price: 550,
+  },
+];
+
+/* =================================================
+   🎨 FRONT & BACK STATE
 ================================================= */
 const sides = {
   front: {
     canvas: frontCanvas,
     ctx: frontCtx,
     designImage: null,
-    design: { x: 150, y: 200, width: 120, height: 120 }
+    design: { x: 0, y: 0, width: 0, height: 0 },
+    active: false
   },
   back: {
     canvas: backCanvas,
     ctx: backCtx,
     designImage: null,
-    design: { x: 150, y: 200, width: 120, height: 120 }
+    design: { x: 0, y: 0, width: 0, height: 0 },
+    active: false
   }
 };
 
 /* =================================================
-   🧥 PRODUCT SELECTION
-   🔴 CHANGE HERE → add / replace product images
+   🧥 SELECT PRODUCT
 ================================================= */
 function selectProduct(index) {
+  const product = PRODUCTS[index];
+  productName = product.name;
 
-  productImage = new Image();
-
-  const PRODUCTS = [
-    "products/Asset 4.png",               // index 0
-    "products/black-t-shirt-mockup.jpg"  // index 1
-    // 🔴 ADD MORE PRODUCTS HERE
-  ];
-
-  productImage.src = PRODUCTS[index];
-
-  productImage.onload = () => {
+  // Preload front and back images
+  const frontImage = new Image();
+  frontImage.src = product.front;
+  frontImage.onload = () => {
+    sides.front.productImage = frontImage;
     drawSide("front");
+  };
+
+  const backImage = new Image();
+  backImage.src = product.back;
+  backImage.onload = () => {
+    sides.back.productImage = backImage;
     drawSide("back");
   };
 }
 
 /* =================================================
-   🔄 ACTIVE SIDE SWITCH
-================================================= */
-frontCanvas.addEventListener("click", () => activeSide = "front");
-backCanvas.addEventListener("click", () => activeSide = "back");
-
-/* =================================================
-   🎨 DESIGN SELECTION
-   🔴 CHANGE HERE → design upload logic
+   🎨 SELECT DESIGN
+   🔴 EDIT HERE → design behavior
 ================================================= */
 function selectDesign(src) {
   const side = sides[activeSide];
+
   side.designImage = new Image();
   side.designImage.src = src;
 
   side.designImage.onload = () => {
 
-    // 🔴 CHANGE HERE → default design size
-    const MAX_DESIGN_SIZE = 200; // px (no stretch)
+    // 🔴 EDIT HERE → max design size (NO STRETCH)
+    const MAX_SIZE = 200;
 
-    side.design.width = side.designImage.width;
-    side.design.height = side.designImage.height;
+    let w = side.designImage.width;
+    let h = side.designImage.height;
 
-    const scale = Math.min(
-      MAX_DESIGN_SIZE / side.design.width,
-      MAX_DESIGN_SIZE / side.design.height,
-      1
-    );
+    const scale = Math.min(MAX_SIZE / w, MAX_SIZE / h, 1);
 
-    side.design.width *= scale;
-    side.design.height *= scale;
+    side.design.width = w * scale;
+    side.design.height = h * scale;
 
-    side.design.x =
-      (side.canvas.width - side.design.width) / 2;
-    side.design.y =
-      (side.canvas.height - side.design.height) / 2;
+    side.design.x = (CANVAS_WIDTH - side.design.width) / 2;
+    side.design.y = (CANVAS_HEIGHT - side.design.height) / 2;
 
     drawSide(activeSide);
   };
@@ -112,10 +127,32 @@ function selectDesign(src) {
 function drawSide(sideName) {
   const side = sides[sideName];
   const { canvas, ctx, designImage, design } = side;
+  const frontButton = document.getElementById("front");
+  const backButton = document.getElementById("back");
+
+  // Update active side buttons
+  frontButton.addEventListener("click", () => {
+    activeSide = "front";
+    drawSide("front");
+  });
+  backButton.addEventListener("click", () => {
+    activeSide = "back";
+    drawSide("back");
+  });
+
+  if (sideName === "front") {
+    frontButton.classList.add("active");
+    backButton.classList.remove("active");
+  } else {
+    frontButton.classList.remove("active");
+    backButton.classList.add("active");
+  }
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (productImage) drawProduct(ctx, canvas);
+  if (side.productImage) {
+  drawProduct(ctx, canvas, side.productImage);
+}
 
   if (designImage) {
     ctx.drawImage(
@@ -128,8 +165,7 @@ function drawSide(sideName) {
   }
 }
 
-function drawProduct(ctx, canvas) {
-
+function drawProduct(ctx, canvas, productImage) {
   const imgRatio = productImage.width / productImage.height;
   const canvasRatio = canvas.width / canvas.height;
 
@@ -143,15 +179,15 @@ function drawProduct(ctx, canvas) {
   } else {
     h = canvas.height;
     w = h * imgRatio;
-    y = 0;
     x = (canvas.width - w) / 2;
+    y = 0;
   }
 
   ctx.drawImage(productImage, x, y, w, h);
 }
 
 /* =================================================
-   🖱️ DRAGGING LOGIC
+   🖱️ DRAGGING LOGIC (MOUSE + TOUCH)
 ================================================= */
 function getPointerPos(e, canvas) {
   const rect = canvas.getBoundingClientRect();
@@ -164,16 +200,16 @@ function getPointerPos(e, canvas) {
   };
 }
 
-function isInside(d, pos) {
+function insideDesign(d, p) {
   return (
-    pos.x >= d.x &&
-    pos.x <= d.x + d.width &&
-    pos.y >= d.y &&
-    pos.y <= d.y + d.height
+    p.x >= d.x &&
+    p.x <= d.x + d.width &&
+    p.y >= d.y &&
+    p.y <= d.y + d.height
   );
 }
 
-function clamp(d, canvas) {
+function clampDesign(d, canvas) {
   d.x = Math.max(0, Math.min(canvas.width - d.width, d.x));
   d.y = Math.max(0, Math.min(canvas.height - d.height, d.y));
 }
@@ -184,7 +220,7 @@ function startDrag(e, sideName) {
 
   const pos = getPointerPos(e, side.canvas);
 
-  if (isInside(side.design, pos)) {
+  if (insideDesign(side.design, pos)) {
     dragging = true;
     activeSide = sideName;
     offsetX = pos.x - side.design.x;
@@ -201,7 +237,7 @@ function drag(e, sideName) {
   side.design.x = pos.x - offsetX;
   side.design.y = pos.y - offsetY;
 
-  clamp(side.design, side.canvas);
+  clampDesign(side.design, side.canvas);
   drawSide(sideName);
 }
 
@@ -210,7 +246,7 @@ function stopDrag() {
 }
 
 /* =================================================
-   📡 EVENT LISTENERS
+   📡 EVENTS
 ================================================= */
 ["mousedown", "touchstart"].forEach(ev => {
   frontCanvas.addEventListener(ev, e => startDrag(e, "front"));
@@ -228,35 +264,65 @@ function stopDrag() {
 });
 
 /* =================================================
-   📏 SIZE BUTTONS
+   📏 SIZE SELECTION
 ================================================= */
 document.querySelectorAll(".size-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
+  btn.onclick = () => {
     document.querySelectorAll(".size-btn")
       .forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
-  });
+  };
 });
 
 /* =================================================
-    ADD TO CART BUTTON
+   🛒 CART
 ================================================= */
-document.getElementById("add-to-cart-btn").addEventListener("click", () => {
-  const cartItems = document.getElementById("cart-items");
-  const li = document.createElement("li");
-  li.textContent = `${activeSide === "front" ? "Front" : "Back"} Side - ${document.querySelector(".size-btn.active").dataset.size}`;
-  cartItems.appendChild(li);
-  const removeBtn = document.createElement("button");
-  removeBtn.textContent = "Remove";
-  removeBtn.addEventListener("click", () => {
-    cartItems.removeChild(li);
-  });
-  li.appendChild(removeBtn);
+document.getElementById("add-to-cart-btn").onclick = () => {
+  const cart = document.getElementById("cart-items");
+  const sizeBtn = document.querySelector(".size-btn.active");
 
-  document.getElementById("remove-all-btn").addEventListener("click", () => {
-    const cartItems = document.getElementById("cart-items");
-    while (cartItems.firstChild) {
-      cartItems.removeChild(cartItems.firstChild);
-    }
-  });
-});
+  const li = document.createElement("li");
+  li.textContent = `${productName} - Size: ${sizeBtn ? sizeBtn.dataset.size : "N/A"}`;
+
+  const remove = document.createElement("button");
+  remove.textContent = "Remove";
+  remove.onclick = () => cart.removeChild(li);
+
+  li.appendChild(remove);
+  cart.appendChild(li);
+};
+
+document.getElementById("remove-all-btn").onclick = () => {
+  document.getElementById("cart-items").innerHTML = "";
+};
+
+/* =================================================
+   📤 EXPORT FRONT + BACK AS ONE HORIZONTAL IMAGE
+================================================= */
+
+document.getElementById("export-both").onclick = () => {
+  if (!productName) productName = "product";
+
+  // Create a temporary canvas
+  const combinedCanvas = document.createElement("canvas");
+  const padding = 20; // space between front and back
+  combinedCanvas.width = CANVAS_WIDTH * 2 + padding;
+  combinedCanvas.height = CANVAS_HEIGHT;
+
+  const ctx = combinedCanvas.getContext("2d");
+
+  // Draw front canvas on the left
+  ctx.drawImage(frontCanvas, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+  // Draw back canvas on the right
+  ctx.drawImage(backCanvas, CANVAS_WIDTH + padding, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+  // Export combined image
+  const link = document.createElement("a");
+  link.download = `${productName}-front-back.png`;
+  link.href = combinedCanvas.toDataURL("image/png", 1.0);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
