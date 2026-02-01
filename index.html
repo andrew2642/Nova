@@ -21,17 +21,23 @@
     <h2>Select Product</h2>
 
     <div id="product-list">
-      <div onclick="selectProduct(0)">
-        <img src="products/Asset 1.png">
-        <p style="font-family: Sterion;">White Hoodie</p>
-        <p style="font-family: Sterion;">Price: 500 EGP</p>
-      </div>
+      <input type="radio" name="product" value="White Hoodie" id="product-0" />
+      <label for="product-0">
+        <div onclick="selectProduct(0)">
+          <img src="products/Asset 1.png">
+          <p style="font-family: Sterion;">White Hoodie</p>
+          <p style="font-family: Sterion;">Price: 500 EGP</p>
+        </div>
+      </label>
 
-      <div onclick="selectProduct(1)">
-        <img src="products/Asset 3.png">
-        <p style="font-family: Sterion;">Black Hoodie</p>
-        <p style="font-family: Sterion;">Price: 500 EGP</p>
-      </div>
+      <input type="radio" name="product" value="Black Hoodie" id="product-1" />
+      <label for="product-1">
+        <div onclick="selectProduct(1)">
+          <img src="products/Asset 3.png">
+          <p style="font-family: Sterion;">Black Hoodie</p>
+          <p style="font-family: Sterion;">Price: 500 EGP</p>
+        </div>
+      </label>
     </div>
   </section>
 
@@ -52,16 +58,58 @@
         </div>
       </div>
 
-      <div class="Choose Side">
+      <div class="choose-side">
       <button id="front" onclick="switchSide('front')">Front</button>
       <button id="back" onclick="switchSide('back')">Back</button>
       </div>
 
+      <!-- DESIGN SIZE CONTROL -->
+      <div class="size-section">
+        <p>Design Size</p>
+        <input 
+          type="range" 
+          id="designSize" 
+          min="10" 
+          max="100" 
+          value="40"
+        >
+      </div>
+
+      <!-- DESIGNS CAROUSEL -->
+<div class="designs-wrapper">
+  <button class="arrow left" onclick="scrollDesigns(-1)">&#10094;</button>
+
       <!-- DESIGNS -->
       <div id="designs">
-        <img src="designs/Asset 5.png" onclick="selectDesign(this.src)">
-        <img src="designs/Asset 3.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-1.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-2.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-3.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-4.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-5.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-6.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-7.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-8.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-9.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-10.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-11.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-12.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-13.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-14.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-15.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-16.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-17.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-18.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-19.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-20.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-21.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-22.png" onclick="selectDesign(this.src)">
+        <img src="designs/Untitled-23.png" onclick="selectDesign(this.src)">
+      
       </div>
+
+  <button class="arrow right" onclick="scrollDesigns(1)">&#10095;</button>
+</div>
+
 
       <!-- SIZE -->
       <div class="size-section">
@@ -77,7 +125,7 @@
       <button id="add-to-cart-btn">Add to Cart</button>
 
       <!-- EXPORT BUTTONS -->
-      <button id="export-both">Export Image</button>
+      <button id="export-btn">Download Image</button>
 
 
     </div>

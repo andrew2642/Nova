@@ -11,6 +11,7 @@ body {
   background: url("background.png") center / cover fixed no-repeat;
   min-height: 100vh;
   color: #fff;
+  overflow-x: hidden;
 }
 
 
@@ -90,7 +91,6 @@ h3 {
 #front {
   font-family: sterion;
   padding: 12px 25px;
-  margin-left: 420px;
   background: #ffffff;
   color: rgb(0, 0, 0);
   border-radius: 12px;
@@ -102,7 +102,6 @@ h3 {
 #front.clicked {
   font-family: sterion;
   padding: 12px 25px;
-  margin-left: 420px;
   background: #000000;
   color: white;
   border-radius: 12px;
@@ -147,16 +146,77 @@ canvas {
   border-radius: 18px;
 }
 
-/* DESIGNS */
-#designs {
+.choose-side {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
   margin: 20px 0;
-  text-align: center;
+}
+
+
+/* ==============================
+   🎨 DESIGNS CAROUSEL
+============================== */
+
+.designs-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+#designs {
+  display: flex;
+  gap: 15px;
+  overflow-x: hidden;     /* hide scroll bar */
+  scroll-behavior: smooth;
+  width: 1000px;       /* 🔴 CHANGE WIDTH HERE */
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 14px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  -webkit-overflow-scrolling: touch; /* SMOOTH SCROLL ON IOS */
 }
 
 #designs img {
-  width: 70px;
+  height: 80px;           /* 🔴 DESIGN DISPLAY SIZE */
+  width: auto;
+  object-fit: contain;    /* NO STRETCH */
+  background: white;
+  padding: 6px;
+  border-radius: 12px;
   cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.2s ease, border 0.2s ease;
 }
+
+#designs img:hover {
+  transform: scale(1.05);
+  border-color: #999;
+}
+
+#designs img.active-design {
+  border-color: black;
+}
+
+/* ARROWS */
+.arrow {
+  background: black;
+  color: white;
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 38px;
+}
+
+.arrow:hover {
+  background: #333;
+}
+
+
 
 /* SIZE */
 .size-section {
@@ -198,7 +258,7 @@ canvas {
   font-size: 16px;
 }
 
-#export-both {
+#export-btn {
   display: block;
   margin: 0px 20px 0 auto;
   padding: 12px 25px;
@@ -251,10 +311,70 @@ li {
   cursor: pointer;
 }
 
-/* MOBILE */
+/* ================================
+   📱 MOBILE RESPONSIVE FIXES
+================================ */
 @media (max-width: 768px) {
+
+  main {
+    padding: 15px;
+  }
+
+  /* PRODUCTS */
+  #product-list {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #product-list div {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  /* CANVAS */
   .canvas-container {
     flex-direction: column;
+    align-items: center;
+  }
+
+  canvas {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+  }
+
+  /* DESIGNS CAROUSEL */
+  .designs-wrapper {
+    width: 100%;
+    justify-content: center;
+  }
+
+  #designs {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  #designs img {
+    height: 65px;
+  }
+
+  /* BUTTONS */
+  #add-to-cart-btn,
+  #export-btn,
+  #remove-all-btn {
+    width: 100%;
+    max-width: 320px;
+    margin: 15px auto;
+  }
+
+  /* CART */
+  #cart-section {
+    padding: 15px;
+  }
+
+  /* TEXT */
+  h2, h3 {
+    text-align: center;
   }
 }
-
