@@ -304,6 +304,12 @@ function exportBoth() {
   newTab.document.body.innerHTML = `<img src="${dataUrl}" style="max-width:100%; height:auto;">`;
   newTab.document.title = `${productName}_front_back`;
 
+  // Download the image
+  const link = document.createElement("a");
+  link.download = `${productName}_front_back.png`;
+  link.href = dataUrl;
+  link.click();
+
   alert("Your design opened in a new tab. Right-click and 'Save image as...' to download.");
 }
 
@@ -347,4 +353,3 @@ function removeAllFromCart() {
 }
 
 document.getElementById("remove-all-btn").onclick = removeAllFromCart;
-
