@@ -297,21 +297,22 @@ function exportBoth() {
   ctx.drawImage(frontCanvas, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   ctx.drawImage(backCanvas, CANVAS_WIDTH + padding, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
+  // Convert to data URL
   const dataUrl = combinedCanvas.toDataURL("image/png");
 
-  // Open in a new tab instead of triggering a download
-  const newTab = window.open();
-  newTab.document.body.innerHTML = `<img src="${dataUrl}" style="max-width:100%; height:auto;">`;
-  newTab.document.title = `${productName}_front_back`;
+  // Show it on screen for screenshotting
+  const screenshotWindow = window.open("", "_blank");
+  screenshotWindow.document.body.style.margin = "0";
+  screenshotWindow.document.body.style.display = "flex";
+  screenshotWindow.document.body.style.justifyContent = "center";
+  screenshotWindow.document.body.style.alignItems = "center";
+  screenshotWindow.document.body.style.height = "100vh";
+  screenshotWindow.document.body.style.background = "#fff";
+  screenshotWindow.document.body.innerHTML = `<img src="${dataUrl}" style="max-width:95%; max-height:95%;">`;
 
-  // Download the image
-  const link = document.createElement("a");
-  link.download = `${productName}_front_back.png`;
-  link.href = dataUrl;
-  link.click();
-
-  alert("Your design opened in a new tab. Right-click and 'Save image as...' to download.");
+  alert("Your design is ready! Take a screenshot to save it.");
 }
+
 
 
 /* =================================================
@@ -353,3 +354,4 @@ function removeAllFromCart() {
 }
 
 document.getElementById("remove-all-btn").onclick = removeAllFromCart;
+
