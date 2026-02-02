@@ -297,13 +297,22 @@ function exportBoth() {
   ctx.drawImage(frontCanvas, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   ctx.drawImage(backCanvas, CANVAS_WIDTH + padding, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
+  // Convert to data URL
   const dataUrl = combinedCanvas.toDataURL("image/png");
 
-  // Show inline
-  const preview = document.getElementById("screenshot-preview");
-  preview.innerHTML = `<p style="color:#fff;">Long press and save image on mobile:</p>
-                       <img src="${dataUrl}" style="max-width:95%; border:1px solid #000;">`;
+  // Show it on screen for screenshotting
+  const screenshotWindow = window.open("", "_blank");
+  screenshotWindow.document.body.style.margin = "0";
+  screenshotWindow.document.body.style.display = "flex";
+  screenshotWindow.document.body.style.justifyContent = "center";
+  screenshotWindow.document.body.style.alignItems = "center";
+  screenshotWindow.document.body.style.height = "100vh";
+  screenshotWindow.document.body.style.background = "#fff";
+  screenshotWindow.document.body.innerHTML = `<img src="${dataUrl}" style="max-width:95%; max-height:95%;">`;
+
+  alert("Your design is ready! Take a screenshot to save it.");
 }
+
 
 
 /* =================================================
@@ -345,3 +354,4 @@ function removeAllFromCart() {
 }
 
 document.getElementById("remove-all-btn").onclick = removeAllFromCart;
+
