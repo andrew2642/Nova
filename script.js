@@ -309,6 +309,7 @@ function exportBoth() {
   screenshotWindow.document.body.style.height = "100vh";
   screenshotWindow.document.body.style.background = "#fff";
   screenshotWindow.document.body.innerHTML = `<img src="${dataUrl}" style="max-width:95%; max-height:95%;">`;
+  screenshotWindow.document.title = "Take a Screenshot";
 
   // Download it
   const a = document.createElement("a");
