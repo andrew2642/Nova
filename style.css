@@ -357,7 +357,7 @@ li {
     height: 130px;
     max-width: 300px;
     text-align: center;
-    font-size: 7px;
+    font-size: 70px;
   }
 
   #product-list img {
@@ -518,3 +518,4 @@ li {
     font-size: 14px;
   }
 }
+
