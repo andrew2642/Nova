@@ -297,11 +297,16 @@ function exportBoth() {
   ctx.drawImage(frontCanvas, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   ctx.drawImage(backCanvas, CANVAS_WIDTH + padding, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-  const link = document.createElement("a");
-  link.download = `${productName}_front_back.png`;
-  link.href = combinedCanvas.toDataURL();
-  link.click();
+  const dataUrl = combinedCanvas.toDataURL("image/png");
+
+  // Open in a new tab instead of triggering a download
+  const newTab = window.open();
+  newTab.document.body.innerHTML = `<img src="${dataUrl}" style="max-width:100%; height:auto;">`;
+  newTab.document.title = `${productName}_front_back`;
+
+  alert("Your design opened in a new tab. Right-click and 'Save image as...' to download.");
 }
+
 
 /* =================================================
    📏 SIZE SELECTION
@@ -342,3 +347,4 @@ function removeAllFromCart() {
 }
 
 document.getElementById("remove-all-btn").onclick = removeAllFromCart;
+
