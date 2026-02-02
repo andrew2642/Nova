@@ -357,14 +357,14 @@ li {
     height: 130px;
     max-width: 300px;
     text-align: center;
-    font-size: 70px;
+    font-size: 7px;
   }
 
   #product-list img {
     width: 70px;
     height: 70px;
     max-width: 100px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
 
   /* ---------- CUSTOMIZATION BOX ---------- */
@@ -518,4 +518,3 @@ li {
     font-size: 14px;
   }
 }
-
