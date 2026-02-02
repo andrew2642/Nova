@@ -1,8 +1,9 @@
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nova Custom Wear</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -107,10 +108,12 @@
         <img src="designs/Untitled-21.png" onclick="selectDesign(this.src)">
         <img src="designs/Untitled-22.png" onclick="selectDesign(this.src)">
         <img src="designs/Untitled-23.png" onclick="selectDesign(this.src)">
+      
       </div>
 
   <button class="arrow right" onclick="scrollDesigns(1)">&#10095;</button>
 </div>
+
 
       <!-- SIZE -->
       <div class="size-section">
@@ -128,6 +131,7 @@
       <!-- EXPORT BUTTONS -->
       <button id="export-btn">Download Image</button>
 
+
     </div>
   </section>
 
@@ -140,26 +144,7 @@
 
 </main>
 
+
 <script src="script.js"></script>
-
-<!-- ==========================
-  FB MOBILE DETECTION FOR POPUP SAFETY
-============================= -->
-<script>
-function isFacebookApp() {
-  const ua = navigator.userAgent || navigator.vendor || window.opera;
-  return (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1);
-}
-
-const originalExport = document.getElementById("export-btn").onclick;
-document.getElementById("export-btn").onclick = function(e) {
-  if (isFacebookApp()) {
-    alert("Facebook mobile browser blocks popups. Please open this page in your device browser to download the image.");
-  } else {
-    originalExport(e);
-  }
-};
-</script>
-
 </body>
 </html>
