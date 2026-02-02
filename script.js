@@ -14,6 +14,10 @@ const EXPORT_HEIGHT = SINGLE_HEIGHT;
 const frontCanvas = document.getElementById("frontCanvas");
 const backCanvas = document.getElementById("backCanvas");
 
+// IMPORTANT: allow touch input
+frontCanvas.style.touchAction = "none";
+backCanvas.style.touchAction = "none";
+
 frontCanvas.width = SINGLE_WIDTH;
 frontCanvas.height = SINGLE_HEIGHT;
 backCanvas.width = SINGLE_WIDTH;
@@ -31,27 +35,15 @@ let offsetX = 0;
 let offsetY = 0;
 
 /* =================================================
-   🧥 PRODUCTS (EDIT HERE)
+   🧥 PRODUCTS
 ================================================= */
 const PRODUCTS = [
-  {
-    name: "White Hoodie",
-    front: "products/Asset 1.png",
-    back: "products/Asset 2.png",
-  },
-  {
-    name: "Black Hoodie",
-    front: "products/Asset 3.png",
-    back: "products/Asset 4.png",
-  },
+  { name: "White Hoodie", front: "products/Asset 1.png", back: "products/Asset 2.png" },
+  { name: "Black Hoodie", front: "products/Asset 3.png", back: "products/Asset 4.png" },
 ];
 
-const currentProduct = {
-  front: null,
-  back: null,
-};
-
-const getProductByName = (name) => PRODUCTS.find(product => product.name === name);
+const currentProduct = { front: null, back: null };
+const getProductByName = (name) => PRODUCTS.find(p => p.name === name);
 
 /* =================================================
    🎨 SIDE STATE
@@ -92,11 +84,10 @@ function selectProduct(index) {
 }
 
 /* =================================================
-   🎨 SELECT DESIGN (ACTIVE SIDE)
+   🎨 SELECT DESIGN
 ================================================= */
 function selectDesign(src) {
   const side = sides[activeSide];
-
   side.designImage = new Image();
   side.designImage.src = src;
 
@@ -117,13 +108,12 @@ function selectDesign(src) {
    📏 DESIGN SIZE CONTROL
 ================================================= */
 const sizeSlider = document.getElementById("designSize");
-
 if (sizeSlider) {
   sizeSlider.addEventListener("input", () => {
     const side = sides[activeSide];
     if (!side.designImage) return;
 
-    side.scale = sizeSlider.value / 500;
+    side.scale = sizeSlider.value / 700;
     updateDesignSize(side);
     clampDesign(side);
     drawSide(activeSide);
@@ -181,7 +171,7 @@ function drawProduct(ctx, canvas, img) {
 }
 
 /* =================================================
-   🧩 DRAW BOTH SIDES SIDE-BY-SIDE (HORIZONTAL)
+   🧩 DRAW BOTH SIDES SIDE-BY-SIDE
 ================================================= */
 function drawBothSides() {
   const exportCanvas = document.createElement("canvas");
@@ -189,10 +179,7 @@ function drawBothSides() {
   exportCanvas.height = EXPORT_HEIGHT;
   const ctx = exportCanvas.getContext("2d");
 
-  // FRONT (LEFT)
   ctx.drawImage(frontCanvas, 0, 0);
-
-  // BACK (RIGHT)
   ctx.drawImage(backCanvas, SINGLE_WIDTH, 0);
 
   return exportCanvas;
@@ -203,14 +190,12 @@ function drawBothSides() {
 ================================================= */
 function scrollDesigns(direction) {
   const container = document.getElementById("designs");
-  const scrollAmount = 1200; // 🔴 CHANGE SCROLL SPEED
-
+  const scrollAmount = 500;
   container.scrollLeft += direction * scrollAmount;
 }
 
-
 /* =================================================
-   🖱️ DRAGGING
+   🖱️ / TOUCH DRAGGING (Pointer Events)
 ================================================= */
 function getPos(e, canvas) {
   const r = canvas.getBoundingClientRect();
@@ -220,42 +205,42 @@ function getPos(e, canvas) {
   };
 }
 
-function startDrag(e, sideName) {
+function pointerDown(e, sideName) {
   if (activeSide !== sideName) return;
-
   const side = sides[sideName];
   if (!side.designImage) return;
 
-  const p = getPos(e, side.canvas);
+  const pos = getPos(e, side.canvas);
   const d = side.design;
 
   if (
-    p.x >= d.x &&
-    p.x <= d.x + d.width &&
-    p.y >= d.y &&
-    p.y <= d.y + d.height
+    pos.x >= d.x &&
+    pos.x <= d.x + d.width &&
+    pos.y >= d.y &&
+    pos.y <= d.y + d.height
   ) {
     dragging = true;
-    offsetX = p.x - d.x;
-    offsetY = p.y - d.y;
+    offsetX = pos.x - d.x;
+    offsetY = pos.y - d.y;
+    e.target.setPointerCapture(e.pointerId);
   }
 }
 
-function drag(e, sideName) {
+function pointerMove(e, sideName) {
   if (!dragging || activeSide !== sideName) return;
-
   const side = sides[sideName];
-  const p = getPos(e, side.canvas);
+  const pos = getPos(e, side.canvas);
 
-  side.design.x = p.x - offsetX;
-  side.design.y = p.y - offsetY;
+  side.design.x = pos.x - offsetX;
+  side.design.y = pos.y - offsetY;
 
   clampDesign(side);
   drawSide(sideName);
 }
 
-function stopDrag() {
+function pointerUp(e) {
   dragging = false;
+  if (e.target.releasePointerCapture) e.target.releasePointerCapture(e.pointerId);
 }
 
 function clampDesign(side) {
@@ -263,22 +248,13 @@ function clampDesign(side) {
   side.design.y = Math.max(0, Math.min(side.canvas.height - side.design.height, side.design.y));
 }
 
-/* =================================================
-   📡 EVENTS
-================================================= */
-["mousedown"].forEach(ev => {
-  frontCanvas.addEventListener(ev, e => startDrag(e, "front"));
-  backCanvas.addEventListener(ev, e => startDrag(e, "back"));
-});
-
-["mousemove"].forEach(ev => {
-  frontCanvas.addEventListener(ev, e => drag(e, "front"));
-  backCanvas.addEventListener(ev, e => drag(e, "back"));
-});
-
-["mouseup", "mouseleave"].forEach(ev => {
-  frontCanvas.addEventListener(ev, stopDrag);
-  backCanvas.addEventListener(ev, stopDrag);
+// Attach pointer events
+[frontCanvas, backCanvas].forEach((canvas, index) => {
+  const sideName = index === 0 ? "front" : "back";
+  canvas.addEventListener("pointerdown", (e) => pointerDown(e, sideName));
+  canvas.addEventListener("pointermove", (e) => pointerMove(e, sideName));
+  canvas.addEventListener("pointerup", pointerUp);
+  canvas.addEventListener("pointercancel", pointerUp);
 });
 
 /* =================================================
@@ -292,7 +268,6 @@ backBtn.onclick = () => switchSide("back");
 
 function switchSide(side) {
   activeSide = side;
-
   frontBtn.classList.toggle("clicked", side === "front");
   backBtn.classList.toggle("clicked", side === "back");
 }
@@ -305,11 +280,7 @@ switchSide("front");
 /* =================================================
    Export front + back as one horizontal image
 ================================================= */
-
-document.getElementById("export-btn").onclick = () => {
-  exportBoth();
-};
-
+document.getElementById("export-btn").onclick = exportBoth;
 const CANVAS_WIDTH = SINGLE_WIDTH;
 const CANVAS_HEIGHT = SINGLE_HEIGHT;
 let productName = null;
@@ -317,21 +288,15 @@ let productName = null;
 function exportBoth() {
   if (!productName) productName = "product";
 
-  // Create a temporary canvas
   const combinedCanvas = document.createElement("canvas");
-  const padding = 20; // space between front and back
+  const padding = 20;
   combinedCanvas.width = CANVAS_WIDTH * 2 + padding;
   combinedCanvas.height = CANVAS_HEIGHT;
 
   const ctx = combinedCanvas.getContext("2d");
-
-  // Draw front canvas on the left
   ctx.drawImage(frontCanvas, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
-  // Draw back canvas on the right
   ctx.drawImage(backCanvas, CANVAS_WIDTH + padding, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-  // Export combined image
   const link = document.createElement("a");
   link.download = `${productName}_front_back.png`;
   link.href = combinedCanvas.toDataURL();
@@ -343,8 +308,7 @@ function exportBoth() {
 ================================================= */
 document.querySelectorAll(".size-btn").forEach(btn => {
   btn.onclick = () => {
-    document.querySelectorAll(".size-btn")
-      .forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".size-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
   };
 });
@@ -360,7 +324,7 @@ function addToCart() {
   const size = sizeBtn ? sizeBtn.dataset.size : "N/A";
 
   const li = document.createElement("li");
-  li.textContent = `${productName ? productName : "N/A"} - Size: ${size}`;
+  li.textContent = `${productName} - Size: ${size}`;
 
   const removeBtn = document.createElement("button");
   removeBtn.textContent = "Remove";
@@ -374,10 +338,7 @@ document.getElementById("add-to-cart-btn").onclick = addToCart;
 
 function removeAllFromCart() {
   const cart = document.getElementById("cart-items");
-  while (cart.firstChild) {
-    cart.removeChild(cart.firstChild);
-  }
+  while (cart.firstChild) cart.removeChild(cart.firstChild);
 }
 
 document.getElementById("remove-all-btn").onclick = removeAllFromCart;
-

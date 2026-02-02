@@ -153,6 +153,9 @@ canvas {
   margin: 20px 0;
 }
 
+#designSize {
+  width: 25%;
+}
 
 /* ==============================
    🎨 DESIGNS CAROUSEL
@@ -311,70 +314,138 @@ li {
   cursor: pointer;
 }
 
-/* ================================
-   📱 MOBILE RESPONSIVE FIXES
-================================ */
+/* ===============================
+   MOBILE CLEANUP (≤ 768px)
+   =============================== */
 @media (max-width: 768px) {
 
-  main {
-    padding: 15px;
+  /* GLOBAL */
+  body {
+    overflow-x: hidden;
   }
 
-  /* PRODUCTS */
+  main {
+    padding: 12px;
+  }
+
+  /* ---------- PRODUCT LIST ---------- */
   #product-list {
-    flex-direction: column;
+    flex-direction: flex;
     align-items: center;
+    gap: 12px;
   }
 
   #product-list div {
-    width: 100%;
-    max-width: 320px;
+    width: 200px;
+    max-width: 300px;
+    text-align: center;
   }
 
-  /* CANVAS */
+  #product-list img {
+    max-width: 100%;
+  }
+
+  /* ---------- CUSTOMIZATION BOX ---------- */
+  #customization {
+    padding: 15px;
+    border-radius: 14px;
+  }
+
+  /* ---------- CANVAS PREVIEW ---------- */
   .canvas-container {
-    flex-direction: column;
+    flex-direction: flex;
+    gap: 20px;
     align-items: center;
   }
 
   canvas {
-    width: 100%;
-    max-width: 320px;
-    height: auto;
+    width: 100% !important;
+    max-width: 280px;
+    height: auto !important;
+    touch-action: none;
+    user-select: none;
   }
 
-  /* DESIGNS CAROUSEL */
+  .canvas-box p {
+    font-size: 14px;
+  }
+
+  /* ---------- FRONT / BACK BUTTONS ---------- */
+  .choose-side {
+    gap: 10px;
+  }
+
+  #front,
+  #back {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  /* ---------- DESIGN SIZE SLIDER ---------- */
+  .size-section input[type="range"] {
+    width: 100%;
+  }
+
+  /* ---------- DESIGNS CAROUSEL ---------- */
   .designs-wrapper {
     width: 100%;
-    justify-content: center;
+    gap: 8px;
   }
 
   #designs {
     width: 100%;
-    max-width: 100%;
-    padding: 10px;
+    overflow-x: scroll;
+    gap: 10px;
   }
 
   #designs img {
-    height: 65px;
+    height: 60px;
+    padding: 4px;
   }
 
-  /* BUTTONS */
-  #add-to-cart-btn,
-  #export-btn,
+  .arrow {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    line-height: 30px;
+  }
+
+  /* ---------- SIZE BUTTONS ---------- */
+  .sizes {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .size-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  /* ---------- ACTION BUTTONS ---------- */
+  #add-to-cart-btn {
+    width: 200px;
+    justify-content: center;
+    font-size: 15px;
+  }
+  
+  #export-btn {
+    width: 200px;
+    justify-content: right;
+    font-size: 15px;
+  }
+
   #remove-all-btn {
-    width: 100%;
-    max-width: 320px;
-    margin: 15px auto;
+    width: 200px;
+    justify-content: right;
+    font-size: 15px;
   }
 
-  /* CART */
+  /* ---------- CART ---------- */
   #cart-section {
-    padding: 15px;
+    padding: 14px;
   }
 
-  /* TEXT */
-  h2, h3 {
-    text-align: center;
+  li {
+    font-size: 14px;
   }
 }
