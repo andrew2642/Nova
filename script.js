@@ -310,6 +310,12 @@ function exportBoth() {
   screenshotWindow.document.body.style.background = "#fff";
   screenshotWindow.document.body.innerHTML = `<img src="${dataUrl}" style="max-width:95%; max-height:95%;">`;
 
+  // Download it
+  const a = document.createElement("a");
+  a.href = dataUrl;
+  a.download = `${productName}.png`;
+  a.click();
+
   alert("Your design is ready! Take a screenshot to save it.");
 }
 
@@ -354,4 +360,3 @@ function removeAllFromCart() {
 }
 
 document.getElementById("remove-all-btn").onclick = removeAllFromCart;
-
