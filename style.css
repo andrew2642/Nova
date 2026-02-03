@@ -353,7 +353,7 @@ li {
   }
 
   #product-list div {
-    width: 100px;
+    width: 105px;
     height: 150px;
     max-width: 300px;
     text-align: center;
@@ -518,3 +518,4 @@ li {
     font-size: 14px;
   }
 }
+
