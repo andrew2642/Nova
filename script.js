@@ -40,6 +40,8 @@ let offsetY = 0;
 const PRODUCTS = [
   { name: "White Hoodie", front: "products/Asset 1.png", back: "products/Asset 2.png" },
   { name: "Black Hoodie", front: "products/Asset 3.png", back: "products/Asset 4.png" },
+  { name: "White T-shirt", front: "products/Asset 5.png", back: "products/Asset 6.png" },
+  { name: "Black T-shirt", front: "products/Asset 7.png", back: "products/Asset 8.png" },
 ];
 
 const currentProduct = { front: null, back: null };
